@@ -14,6 +14,8 @@ if (typeof questions !== 'undefined' && questions.length > 0) {
 } else {
     warning.classList.remove('hidden');
 }
+
+// отображает контент
 function showQuetions(index) {
     const title = $('.quiz__title');
     const list = $('.quiz__list');
@@ -28,11 +30,41 @@ function showQuetions(index) {
         list.insertAdjacentHTML('beforeend', text)
     })
 
+    const options = list.querySelectorAll('.quiz__option');
+    options.forEach(el => el.setAttribute('onclick', 'optionSelected(this)'));
+
     total.innerHTML = `${index + 1} из ${questions.length + 1}`;
-    progress.style.width = `${Math.round(((index + 1) / questions.length) * 100)}%`
+    progress.style.width = `${Math.round(((index + 1) / questions.length) * 100)}%`;
+}
+
+
+function optionSelected(answer) {
+    const userAnswer = answer.textContent;
+    const correctAnswer = questions[count].answer;
+    const options = document.querySelectorAll('.quiz__option');
+    const iconCorrect = "<span'>&#10004;</span>";
+    const iconIncorrect = "<span'>&#9940;</span>";
+
+    if (userAnswer == correctAnswer) {
+        userScore += 1;
+        answer.classList.add('correct');
+        answer.insertAdjacentHTML('beforeend', iconCorrect);
+    } else {
+        answer.classList.add('incorrect');
+        answer.insertAdjacentHTML('beforeend', iconIncorrect);
+
+        options.forEach(el => {
+            if (el.textContent == correctAnswer) {
+                console.log(el.textContent);
+                setTimeout(() => {
+                    el.classList.add('corect');
+                    el.insertAdjacentHTML('beforeend', iconCorrect)
+                }, 100)
+            }
+        })
+    }
+    options.forEach(el => el.classList.add('disabled'))
 }
 
 
 
-
-console.log(quiz);
